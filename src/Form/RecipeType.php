@@ -145,27 +145,29 @@ class RecipeType extends AbstractType
             //     ],
             //     'required' => false
             // ])
-            // ->add('ingredients', EntityType::class, [
-            //     'class' => Ingredient::class,
-            //     'query_builder' => function (IngredientRepository $r) {
-            //         return $r->createQueryBuilder('i')
-            //             ->where('i.user = :user')
-            //             ->orderBy('i.name', 'ASC')
-            //             ->setParameter('user', $this->token->getToken()->getUser());
-            //     },
-            //     'label' => 'Les ingrédients',
-            //     'label_attr' => [
-            //         'class' => 'form-label mt-4'
-            //     ],
-            //     'choice_label' => 'name',
-            //     'multiple' => true,
-            //     'expanded' => true,
-            // ])
+            ->add('ingredients', EntityType::class, [
+                'class' => Ingredient::class,
+                'query_builder' => function (IngredientRepository $r) {
+                    return $r->createQueryBuilder('i')
+                        ->orderBy('i.name', 'ASC');
+
+                        // ->where('i.user = :user')
+                        // ->orderBy('i.name', 'ASC')
+                        // ->setParameter('user', $this->token->getToken()->getUser());
+                },
+                'label' => 'Les ingrédients',
+                'label_attr' => [
+                    'class' => 'form-label mt-4'
+                ],
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+            ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-primary mt-4'
                 ],
-                'label' => 'Créer une recette'
+                'label' => 'Enregistrer'
             ]);
     }
 

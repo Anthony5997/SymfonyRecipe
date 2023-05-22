@@ -5,11 +5,11 @@
 
 {% block body %}
 	<div class="container mt-4">
-		{# {% for message in app.flashes('success') %}
+		{% for message in app.flashes('success') %}
 			<div class="alert alert-success mt-4">
 				{{ message }}
 			</div>
-		{% endfor %} #}
+		{% endfor %}
 
 		{% if not recipes.items is same as([]) %}
 			<h1>Mes recettes</h1>
@@ -20,7 +20,7 @@
 
 			<div class="count mt-4">Il y a
 				{{ recipes.getTotalItemCount }}
-				ingrédient(s)
+				recette(s)
 			</div>
 
 			<table class="table table-hover">
@@ -45,10 +45,10 @@
 							<td>{{ recipe.difficulty != null ? recipe.difficulty : "Non renseigné" }}</td>
 							<td>{{ recipe.createdAt|date('d/m/Y') }}</td>
 							<td>
-								{# <a href="{{ path('recipe.edit', { id: recipe.id }) }}" class="btn btn-info">Modifier</a> #}
+								<a href="{{ path('recipe.edit', { id: recipe.id }) }}" class="btn btn-info">Modifier</a>
 							</td>
 							<td>
-								{# <a href="{{ path('recipe.delete', { id: recipe.id }) }}" class="btn btn-warning">Supprimer</a> #}
+								<a href="{{ path('recipe.delete', { id: recipe.id }) }}" class="btn btn-warning">Supprimer</a>
 							</td>
 						</tr>
 					{% endfor %}
@@ -61,9 +61,9 @@
 		{% else %}
 			<h4>Il n'y a pas de recettes</h4>
 
-			{# <a href="{{ path('recipe.create') }}" class="btn btn-primary">
+			<a href="{{ path('recipe.create') }}" class="btn btn-primary">
 				Créer une recette
-			</a> #}
+			</a>
 		{% endif %}
 	</div>
 {% endblock %}

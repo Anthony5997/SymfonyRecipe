@@ -14,9 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class IngredientController extends AbstractController
 {
-
     /**
-     * View all Ingredients
+     * Show all ingredients
      *
      * @param IngredientRepository $ingredientRepository
      * @param PaginatorInterface $paginatorInterface
@@ -26,7 +25,6 @@ class IngredientController extends AbstractController
     #[Route('/ingredient', name: 'ingredient.index', methods: ['GET'])]
     public function index(IngredientRepository $ingredientRepository, PaginatorInterface $paginatorInterface, Request $request): Response
     {
-
         $ingredients = $paginatorInterface->paginate(
             $ingredientRepository->findAll(), /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
@@ -38,27 +36,23 @@ class IngredientController extends AbstractController
     }
 
     /**
-     * Create a new Ingredient
+     * Create an ingredient
      *
      * @param Request $request
      * @param EntityManagerInterface $entityManagerInterface
      * @return Response
      */
     #[Route("/ingredient/create", name: "ingredient.create", methods:["GET", "POST"])]
-    public function create(Request $request, EntityManagerInterface $entityManagerInterface) : Response{
-        
+    public function create(Request $request, EntityManagerInterface $entityManagerInterface) : Response
+    {
         $ingredient = new Ingredient();
 
         $form = $this->createForm(IngredientType::class, $ingredient);
-
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $ingredient = $form->getData();
-
-            // ... perform some action, such as saving the data to the database
-
             $entityManagerInterface->persist($ingredient);
             $entityManagerInterface->flush();
 
@@ -73,23 +67,24 @@ class IngredientController extends AbstractController
         return $this->render('pages/ingredient/create.html.twig', [
             "form" => $form->createView(),
         ]);
-
     }
-
     
+    /**
+     * Edit an ingredient
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $entityManagerInterface
+     * @param Ingredient $ingredient
+     * @return Response
+     */
     #[Route("/ingredient/edit/{id}", name: "ingredient.edit", methods:["GET", "POST"])]
-    public function edit(Request $request, EntityManagerInterface $entityManagerInterface, Ingredient $ingredient) : Response{
-        
-
+    public function edit(Request $request, EntityManagerInterface $entityManagerInterface, Ingredient $ingredient) : Response
+    {
         $form = $this->createForm(IngredientType::class, $ingredient);
-
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $ingredient = $form->getData();
-
-            // ... perform some action, such as saving the data to the database
 
             $entityManagerInterface->persist($ingredient);
             $entityManagerInterface->flush();
@@ -108,17 +103,24 @@ class IngredientController extends AbstractController
 
     }
 
+    /**
+     * Delete an ingredient
+     *
+     * @param EntityManagerInterface $entityManagerInterface
+     * @param Ingredient $ingredient
+     * @return Response
+     */
     #[Route("/ingredient/delete/{id}", name: "ingredient.delete", methods:["GET", "POST"])]
-    public function delete(Request $request, EntityManagerInterface $entityManagerInterface, Ingredient $ingredient) : Response{
- 
-            $entityManagerInterface->remove($ingredient);
-            $entityManagerInterface->flush();
+    public function delete(EntityManagerInterface $entityManagerInterface, Ingredient $ingredient) : Response
+    {
+        $entityManagerInterface->remove($ingredient);
+        $entityManagerInterface->flush();
 
-            $this->addFlash(
-                'success',
-                'Ingrédient supprimé avec succès !'
-            );
+        $this->addFlash(
+            'success',
+            'Ingrédient supprimé avec succès !'
+        );
 
-            return $this->redirectToRoute('ingredient.index');
-        }
+        return $this->redirectToRoute('ingredient.index');
+    }
 }
